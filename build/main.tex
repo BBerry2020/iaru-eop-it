@@ -5,11 +5,12 @@
 
 % ---------- pagina (stesso formato dell'originale: 568.98 x 759 pt) ----------
 \usepackage[paperwidth=568.98bp,paperheight=759bp,
-  left=40mm,right=34mm,top=27mm,bottom=27mm,
-  headheight=14pt,headsep=8mm,footskip=11mm,marginparwidth=30mm]{geometry}
+  left=26mm,right=18mm,top=21mm,bottom=23mm,
+  headheight=14pt,headsep=6mm,footskip=10mm,marginparwidth=20mm]{geometry}
 
 % ---------- lingua e caratteri ----------
 \usepackage{fontspec}
+\XeTeXgenerateactualtext=1
 \usepackage{polyglossia}
 \setmainlanguage{italian}
 \defaultfontfeatures{Ligatures=TeX}
@@ -65,6 +66,8 @@
 \usepackage{fancyvrb}
 \usepackage[most]{tcolorbox}
 \usepackage[hang,flushmargin]{footmisc}
+\usepackage{dblfnote}
+\DFNalwaysdouble
 \usepackage{xurl}
 \usepackage{etoolbox}
 \usepackage{amsmath}
@@ -96,7 +99,7 @@
 \renewcommand{\@makefnmark}{\hbox{\textsuperscript{\eopliningserif\color{eopblue}\@thefnmark}}}
 \makeatother
 \setcounter{secnumdepth}{-1}
-\widowpenalty=10000 \clubpenalty=10000
+\widowpenalty=3000 \clubpenalty=3000 \raggedbottom
 
 % ---------- testatina e piede ----------
 \newcommand{\eopchapmark}{}
@@ -147,10 +150,10 @@
   \vfill\vfill\clearpage}
 
 \newcommand{\eopchapter}[2]{%
-  \clearpage
+  \par\needspace{0.16\textheight}\addvspace{20pt}%
+  {\color{eopteal}\rule{\linewidth}{0.5pt}}\par\nopagebreak\vspace{4pt}%
   \phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{#1}#2}%
   \renewcommand{\eopchapmark}{#2}\renewcommand{\eopsecmark}{}%
-  \vspace*{2pt}%
   {\raggedright\fontsize{17}{21}\selectfont\eopheadfont\color{eopblue}%
    \makebox[0pt][r]{\eoplightfont #1\hspace{9pt}}#2\par}%
   \nopagebreak\vspace{10pt}}
@@ -202,26 +205,51 @@
   \everypar{\hangindent=1.1em\hangafter=1}}{\end{eopnotebox}}
 
 \newenvironment{eoptable}[1]{%
-  \par\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.28}%
+  \par\small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
   \begin{longtable}{#1}}{\end{longtable}\par}
+\newenvironment{eopsmalltable}[1]{%
+  \small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
+  \begin{tabular}{#1}}{\end{tabular}}
 \newcommand{\eopth}[1]{{\sffamily\bfseries\color{eopblue}#1}}
 \newcommand{\eoptablecaption}[2]{%
   \par\needspace{7\baselineskip}\addvspace{6pt}%
   {\sffamily\small\color{eopblue}\textbf{Tabella #1:} #2\par}\nopagebreak\vspace{1pt}}
 
+\usepackage{wrapfig}
+% larghezza di ogni figura come frazione della giustezza
+\expandafter\def\csname eopfw@5-i\endcsname{0.56}
+\expandafter\def\csname eopfw@5-ii\endcsname{0.56}
+\expandafter\def\csname eopfw@7-i\endcsname{0.50}
+\expandafter\def\csname eopfw@7-ii\endcsname{0.50}
+\expandafter\def\csname eopfs@5-i\endcsname{r}
+\expandafter\def\csname eopfs@5-ii\endcsname{l}
+\expandafter\def\csname eopfs@7-i\endcsname{r}
+\expandafter\def\csname eopfs@7-ii\endcsname{r}
+\setlength{\columnsep}{5mm}
+\makeatletter
 \newcommand{\eopfigure}[3]{%
-  \begin{figure}[tbp]
-    \centering\includegraphics[width=\linewidth]{#1}\par\vspace{4pt}
-    {\small\raggedright\textbf{\color{eopblue}Figura #2:} #3\par}
-  \end{figure}}
+  \par
+  \edef\eop@side{\csname eopfs@#2\endcsname}%
+  \expandafter\eop@wrap\expandafter{\eop@side}{\csname eopfw@#2\endcsname}{#1}{#2}{#3}}
+\newsavebox{\eop@figbox}
+\newcommand{\eop@wrap}[5]{%
+  \sbox{\eop@figbox}{\begin{minipage}[t]{#2\textwidth}
+    \centering\includegraphics[width=\linewidth]{#3}\par\vspace{3pt}
+    {\footnotesize\setlength{\parskip}{0pt}\raggedright\textbf{\color{eopblue}Figura #4:} #5\par}
+  \end{minipage}}%
+  \needspace{\dimexpr\ht\eop@figbox+\dp\eop@figbox+3\baselineskip\relax}%
+  \begin{wrapfigure}{#1}{#2\textwidth}
+    \vspace{-8pt}\usebox{\eop@figbox}\vspace{-2pt}
+  \end{wrapfigure}}
+\makeatother
 \renewcommand{\topfraction}{0.9}\renewcommand{\textfraction}{0.1}
 \renewcommand{\floatpagefraction}{0.75}
 \setlength{\textfloatsep}{14pt plus 4pt minus 2pt}
 \setlength{\floatsep}{14pt plus 4pt minus 2pt}
 
-\newenvironment{eopabbrlist}{\par\begin{multicols}{2}\footnotesize\setlength{\parskip}{0.6pt}\raggedright}{\end{multicols}}
-\newcommand{\eopabbr}[2]{\par\hangindent=4.4em\hangafter=1\noindent
-  \makebox[4.4em][l]{\sffamily\bfseries\color{eopblue}#1}#2\par}
+\newenvironment{eopabbrlist}{\par\setlength{\columnsep}{14pt}\begin{multicols}{2}\fontsize{7}{7.95}\selectfont\setlength{\parskip}{0pt}\raggedright}{\end{multicols}}
+\newcommand{\eopabbr}[2]{\par\hangindent=3.9em\hangafter=1\noindent
+  \makebox[3.9em][l]{\sffamily\bfseries\color{eopblue}#1}#2\par}
 
 % ---------- indice ----------
 \makeatletter

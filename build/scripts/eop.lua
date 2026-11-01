@@ -12,6 +12,30 @@ local function wrap(env, blocks, opt)
 end
 
 function Div(el)
+  if el.classes:includes('sbs') then
+    local wa = el.attributes['wa'] or '0.48'
+    local wb = el.attributes['wb'] or '0.48'
+    local parts, cur = {}, {}
+    for _, b in ipairs(el.content) do
+      if b.t == 'RawBlock' then
+        local txt = b.text
+        if txt:find('\\eoptablecaption') then
+          if #cur > 0 then table.insert(parts, cur) end
+          cur = {txt}
+        else
+          txt = txt:gsub('\\begin{eoptable}', '\\begin{eopsmalltable}')
+                   :gsub('\\end{eoptable}', '\\end{eopsmalltable}')
+                   :gsub('\\endhead\n', '')
+          table.insert(cur, txt)
+        end
+      end
+    end
+    if #cur > 0 then table.insert(parts, cur) end
+    local out = '\\par\\needspace{12\\baselineskip}\\noindent\\begin{minipage}[t]{' .. wa .. '\\linewidth}\n'
+      .. table.concat(parts[1], '\n') .. '\n\\end{minipage}\\hfill\\begin{minipage}[t]{' .. wb .. '\\linewidth}\n'
+      .. table.concat(parts[2], '\n') .. '\n\\end{minipage}\\par\\vspace{8pt}'
+    return pandoc.RawBlock('latex', out)
+  end
   if el.classes:includes('warn') then
     return wrap('eopwarn', el.content)
   elseif el.classes:includes('dialog') then
@@ -67,7 +91,7 @@ function Table(tbl)
   for c = 1, ncols do w[c] = math.sqrt(math.min(len[c], 90)); total = total + w[c] end
   for c = 1, ncols do
     w[c] = w[c] / total
-    if w[c] < 0.09 then w[c] = 0.09 end
+    if w[c] < 0.12 then w[c] = 0.12 end
   end
   total = 0
   for c = 1, ncols do total = total + w[c] end

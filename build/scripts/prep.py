@@ -92,7 +92,7 @@ while i < len(body):
             in_abbr = False
             continue
         elif l.strip() and not l.startswith("|"):
-            out.append(l)  # intro sentence
+            out.append(raw(r"{\small " + tex_escape(l.strip()) + r"\par}"))  # intro sentence
         i += 1
         continue
 
@@ -116,7 +116,7 @@ while i < len(body):
         flush_dialog()
         title = m.group(1)
         label = re.sub(r"[^a-z]", "", title.lower())
-        cmd = "eopfrontcont" if label in ("noteallettore", "notalegale") else "eopfront"
+        cmd = "eopfrontcont" if label in ("ringraziamenti", "noteallettore", "notalegale") else "eopfront"
         out.append(raw(rf"\{cmd}{{{tex_escape(title)}}}{{{label}}}"))
         front_lead_pending = True
         i += 1
@@ -186,6 +186,35 @@ while i < len(body):
 
 flush_dialog()
 md = "\n".join(out)
+
+def wrap_pair(md, a, b, wa, wb):
+    ia = md.index("\\eoptablecaption{%s}" % a)
+    ia = md.rfind("```{=latex}", 0, ia)
+    ib = md.index("\\eoptablecaption{%s}" % b)
+    # end of table B = first blank line after its last table row
+    tb = md.index("\n|", ib)
+    end = tb
+    for line in md[tb+1:].split("\n"):
+        if not line.startswith("|"):
+            break
+        end += len(line) + 1
+    return md[:ia] + "\n::: {.sbs wa=%s wb=%s}\n\n" % (wa, wb) + md[ia:end+1] + "\n:::\n" + md[end+1:]
+
+md = wrap_pair(md, "11-A", "11-B", "0.53", "0.43")
+md = wrap_pair(md, "13-A", "13-B", "0.44", "0.52")
+
+
+def move_fig_before(md, key, anchor):
+    """Move a figure block up so it wraps the text that refers to it."""
+    s = md.index("\\eopfigure{%s}{%s}" % (FIGS[key], key))
+    s = md.rfind("```{=latex}", 0, s)
+    e = md.index("```", md.index("\n", s + 12)) + 3
+    block = md[s:e]
+    md = md[:s] + md[e:]
+    a = md.index(anchor)
+    return md[:a] + block + "\n\n" + md[a:]
+
+md = move_fig_before(md, "5-i", "È fondamentale anche rivedere")
 
 # bold uppercase run-in labels (AMICIZIA., R – LEGGIBILITÀ (READABILITY).) -> small caps
 md = re.sub(r"\*\*([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ ,'’()–-]+\.)\*\*",
