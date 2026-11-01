@@ -16,6 +16,10 @@
 \newfontfamily\eopcoverfont{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Light,BoldFont=*-Regular,WordSpace={1.9,1.4,1}]
 \setsansfont{SourceSans3}[Path=fonts/,Extension=.otf,
   UprightFont=*-Regular,ItalicFont=*-It,BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt]
+\newfontfamily\eopcoverbold{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Semibold]
+\newfontfamily\eopcoverreg{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Regular,ItalicFont=*-It]
+% testo della copertina: niente sillabazione, righe a bandiera
+\newcommand{\eopnohyph}{\hyphenpenalty=10000 \exhyphenpenalty=10000 \raggedright}
 \definecolor{eopteal}{HTML}{0097B2}
 \definecolor{eopcream}{HTML}{FCE8A2}
 
@@ -35,14 +39,12 @@
   % titolo
   \node[anchor=north,text width=150mm,align=center,inner sep=0pt]
     at ([xshift=258mm+\S mm,yshift=246mm-20mm]O)
-    {\color{eopcream}\eopcoverfont\fontsize{24}{32}\selectfont
-     International Amateur Radio Union\\
-     Etica e procedure operative\\
-     per il radioamatore\par
-     \vspace{5mm}{\fontsize{14}{17}\selectfont Quarta edizione}\par
-     \vspace{4mm}{\fontsize{10.5}{15}\selectfont
+    {\color{eopcream}{\eopcoverreg\fontsize{19}{24}\selectfont International Amateur Radio Union\par}
+     \vspace{3mm}{\eopcoverbold\fontsize{28}{33}\selectfont Etica e procedure operative\\per il radioamatore\par}
+     \vspace{5mm}{\eopcoverreg\fontsize{14}{17}\selectfont Quarta edizione\par}
+     \vspace{4mm}{\eopcoverreg\fontsize{10.5}{15}\selectfont
        Ahmad AlHoli 9K2DB · Marco Colombo IU2DXF\\
-       Frode Igland LA6VQ · Rafal Lukawiecki EI6LA · Ian Suart GM4AUP}};
+       Frode Igland LA6VQ · Rafal Lukawiecki EI6LA · Ian Suart GM4AUP\par}};
   % riquadro "non ufficiale"
   \node[anchor=south east,draw=eopcream,line width=0.8pt,rounded corners=3pt,
         fill=eopteal!85!black,inner xsep=8pt,inner ysep=6pt,text width=36mm,align=center]
@@ -51,30 +53,33 @@
      \textbf{TRADUZIONE ITALIANA\\NON UFFICIALE}\\[2pt]
      per uso personale\\non approvata da IARU né da ARI};
   % ---- dorso: testo dal basso verso l'alto, solo se c'è spazio ----
+  \pgfmathsetmacro\eopspinefs{min(11,1.75*\eopspine)}
   \ifdim\eopspine mm>3.9mm
     \node[rotate=90,inner sep=0pt,anchor=center]
       at ([xshift=173mm+0.5*\S mm,yshift=123mm]O)
-      {\color{eopcream}\sffamily\fontsize{7}{8}\selectfont
-       \textbf{IARU} \enspace Etica e procedure operative per il radioamatore
-       \enspace·\enspace Quarta edizione \enspace·\enspace traduzione non ufficiale};
+      {\color{eopcream}\fontsize{\eopspinefs}{\eopspinefs}\selectfont
+       {\eopcoverbold Etica e procedure operative per il radioamatore}%
+       \hspace{0.9em}{\eopcoverreg IARU · Quarta edizione}};
   \fi
   % ---- quarta di copertina ----
-  \node[anchor=north west,text width=128mm,align=left,inner sep=0pt]
-    at ([xshift=21mm,yshift=246mm-24mm]O)
-    {\color{eopcream}\eopcoverfont\fontsize{17}{22}\selectfont
-     Etica e procedure operative\\per il radioamatore\par
-     \vspace{3mm}{\sffamily\fontsize{10}{14}\selectfont
+  \node[anchor=north west,text width=134mm,inner sep=0pt]
+    at ([xshift=21mm,yshift=246mm-25mm]O)
+    {\eopnohyph\color{eopcream}
+     {\eopcoverbold\fontsize{16.5}{20}\selectfont Etica e procedure operative per il radioamatore\par}
+     \vspace{1.5mm}{\eopcoverreg\fontsize{11}{14}\selectfont Quarta edizione · traduzione italiana non ufficiale\par}
+     \vspace{5mm}{\color{eopcream}\rule{25mm}{0.8pt}}\par
+     \vspace{5mm}{\eopcoverreg\fontsize{10.5}{15.5}\selectfont
      Il riferimento dell'IARU su come comportarsi in aria: ascoltare prima di trasmettere,
-     condurre un QSO in fonia, CW e modi digitali, partecipare a pileup e contest,
-     rispettare i piani di banda e convivere con gli altri utenti dello spettro.\par}};
-  \node[anchor=south west,text width=128mm,align=left,inner sep=0pt]
-    at ([xshift=21mm,yshift=25mm]O)
-    {\color{eopcream}\sffamily\fontsize{8.5}{12}\selectfont
-     Traduzione italiana non ufficiale di \emph{Ethics and Operating Procedures for the
-     Radio Amateur}, Fourth Edition, Revision 4.2.0 © 2026 International Amateur Radio
-     Union Region 1. Licenza CC BY-SA 4.0.\\[4pt]
-     Non approvata dall'IARU né certificata dall'ARI. In caso di differenze fa fede l'edizione inglese.\\[4pt]
-     github.com/BBerry2020/iaru-eop-it};
+     condurre un QSO in fonia, in CW e nei modi digitali, partecipare a pileup e contest,
+     rispettare i piani di banda e convivere con gli altri utenti dello spettro radio.\par}};
+  \node[anchor=south west,text width=134mm,inner sep=0pt]
+    at ([xshift=21mm,yshift=24mm]O)
+    {\eopnohyph\color{eopcream}\eopcoverreg\fontsize{8.5}{12}\selectfont
+     Traduzione italiana non ufficiale di \emph{Ethics and Operating Procedures for the Radio Amateur},
+     Fourth Edition, Revision~4.2.0, © 2026 International Amateur Radio Union Region~1,
+     con licenza CC~BY-SA~4.0.\par
+     \vspace{2.5mm}Non approvata dall'IARU né certificata dall'ARI. In caso di differenze fa fede l'edizione inglese.\par
+     \vspace{2.5mm}github.com/BBerry2020/iaru-eop-it\par};
   % ---- linee guida (solo per l'anteprima, mai nel file di stampa) ----
   \ifnum\eopguides=1
     \draw[red,line width=0.3pt] ([xshift=3mm,yshift=3mm]O) rectangle ([xshift=343mm+\S mm,yshift=243mm]O);
