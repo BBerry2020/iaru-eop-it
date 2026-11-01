@@ -247,8 +247,9 @@
 \setlength{\textfloatsep}{14pt plus 4pt minus 2pt}
 \setlength{\floatsep}{14pt plus 4pt minus 2pt}
 
-\newenvironment{eopabbrlist}{\par\setlength{\columnsep}{14pt}\begin{multicols}{2}\fontsize{7}{7.95}\selectfont\setlength{\parskip}{0pt}\raggedright}{\end{multicols}}
-\newcommand{\eopabbr}[2]{\par\hangindent=3.9em\hangafter=1\noindent
+\newenvironment{eopabbrlist}{\par\setlength{\columnsep}{14pt}\begin{multicols}{2}\fontsize{7}{7.95}\selectfont\setlength{\parskip}{0pt}\interlinepenalty=10000\raggedright}{\end{multicols}}
+\newlength{\eopabbrsep}\setlength{\eopabbrsep}{2.5pt plus 1.5pt}
+\newcommand{\eopabbr}[2]{\par\vspace{\eopabbrsep}\hangindent=3.9em\hangafter=1\noindent
   \makebox[3.9em][l]{\sffamily\bfseries\color{eopblue}#1}#2\par}
 
 % ---------- indice ----------
@@ -293,24 +294,25 @@
 \end{tikzpicture}
 \null\clearpage
 
-% ================= FRONTESPIZIO =================
+% ================= FRONTESPIZIO E DIRITTI (una sola pagina) =================
 \thispagestyle{eopempty}
-\vspace*{20mm}
+\vspace*{2mm}
 {\raggedright\color{eopblue}\eopheadfont
- {\fontsize{13}{16}\selectfont International Amateur Radio Union\par}
- \vspace{6pt}
- {\fontsize{26}{31}\selectfont Etica e procedure operative\\per il radioamatore\par}
- \vspace{10pt}
- {\fontsize{14}{17}\selectfont Quarta edizione\par}}
-\vspace{22mm}
-{\sffamily\small\color{eopblue}\eopsc{autori}\par}
-\vspace{2pt}
+ {\fontsize{12}{15}\selectfont International Amateur Radio Union\par}
+ \vspace{5pt}
+ {\fontsize{24}{29}\selectfont Etica e procedure operative\\per il radioamatore\par}
+ \vspace{7pt}
+ {\fontsize{13}{16}\selectfont Quarta edizione\par}}
+\vspace{10mm}
+\noindent\begin{minipage}[t]{0.48\linewidth}
+{\sffamily\small\color{eopblue}\eopsc{autori}\par}\vspace{2pt}
 Ahmad AlHoli 9K2DB\\Marco Colombo IU2DXF\\Frode Igland LA6VQ\\Ian Suart GM4AUP\par
-\vspace{8pt}
-{\sffamily\small\color{eopblue}\eopsc{autore e curatore}\par}
-\vspace{2pt}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+{\sffamily\small\color{eopblue}\eopsc{autore e curatore}\par}\vspace{2pt}
 Rafal Lukawiecki EI6LA\par
-\vfill
+\end{minipage}\par
+\vspace{10mm}
 \begin{tcolorbox}[enhanced,colback=eopnoteback,colframe=eopteal,boxrule=0.6pt,arc=2pt,
   left=9pt,right=9pt,top=7pt,bottom=7pt,fontupper=\small]
 {\sffamily\bfseries\color{eopblue}TRADUZIONE ITALIANA NON UFFICIALE – PER USO PERSONALE}\par\vspace{3pt}
@@ -320,47 +322,35 @@ dall'ARI – Associazione Radioamatori Italiani. In caso di differenze fa fede l
 in lingua inglese, disponibile sul
 \href{https://www.iaru-r1.org/on-the-air/eop/}{sito di IARU Region 1}.
 \end{tcolorbox}
-\vspace{4mm}
+\vspace{3mm}
 {\small Repository della traduzione:
 \href{https://github.com/BBerry2020/iaru-eop-it}{\nolinkurl{github.com/BBerry2020/iaru-eop-it}}\par}
-\clearpage
-
-% ================= DIRITTI =================
-\thispagestyle{eopempty}
-\vspace*{\fill}
-{\small\setlength{\parskip}{6pt}
+\vfill
+{\color{eopteal}\rule{\linewidth}{0.4pt}}\par\vspace{6pt}
+{\footnotesize\setlength{\parskip}{5pt}
 \textbf{Edizione originale.} \emph{International Amateur Radio Union Ethics and Operating Procedures
 for the Radio Amateur}, Fourth Edition, Revision 4.2.0. Copyright © 2026 International Amateur
 Radio Union Region 1. Rilasciata con licenza Creative Commons Attribuzione – Condividi allo stesso
 modo 4.0 Internazionale (CC BY-SA 4.0):
-\href{https://creativecommons.org/licenses/by-sa/4.0/deed.it}{\nolinkurl{creativecommons.org/licenses/by-sa/4.0}}
-
+\href{https://creativecommons.org/licenses/by-sa/4.0/deed.it}{\nolinkurl{creativecommons.org/licenses/by-sa/4.0}}.
 Pagina ufficiale dell'edizione originale:
-\href{https://www.iaru-r1.org/on-the-air/eop/}{Codes of Conduct | International Amateur Radio Union (IARU)}
+\href{https://www.iaru-r1.org/on-the-air/eop/}{Codes of Conduct | International Amateur Radio Union (IARU)}.
 
 Pubblicata da International Amateur Radio Union Region 1 (IARU R1), c/o Baer-Nutz-AG,
 Scheuermattstrasse 8A, CH-6330 Cham ZG, Svizzera ·
 \href{mailto:eop@iaru-r1.org}{eop@iaru-r1.org} · ISBN 978-3-9526620-0-7 (PDF eBook, inglese).
 Questa traduzione non ha un ISBN proprio.
 
-\textbf{Autori dell'edizione originale.} Ahmad AlHoli 9K2DB, Marco Colombo IU2DXF, Frode Igland
-LA6VQ, Ian Suart GM4AUP; autore e curatore Rafal Lukawiecki EI6LA. L'immagine di copertina è di
-Silvano Ancelotti © 2025, usata secondo la licenza CC BY 4.0
+\textbf{Copertina.} Immagine di Silvano Ancelotti © 2025, usata secondo la licenza CC BY 4.0
 (\href{https://creativecommons.org/licenses/by/4.0}{\nolinkurl{creativecommons.org/licenses/by/4.0}});
 in questa edizione è stata modificata rimuovendo il testo originale e il logo IARU.
 
 \textbf{Traduzione italiana.} Copyright © 2026 i contributori del repository
 \href{https://github.com/BBerry2020/iaru-eop-it}{\nolinkurl{github.com/BBerry2020/iaru-eop-it}}.
 Rilasciata anch'essa con licenza CC BY-SA 4.0, come richiesto dalla licenza dell'originale.
-
-\textbf{Modifiche rispetto all'originale.} Il testo è tradotto in italiano senza modifiche di
-contenuto. Le note del traduttore sono segnalate con [N.d.T.]. Le formule operative usate in aria
-(chiamate, esempi di QSO) sono lasciate nella forma originale. Traduzione realizzata con l'ausilio
-di strumenti di intelligenza artificiale.
-
-\textbf{Natura del documento.} Traduzione non ufficiale per uso personale: non è approvata
-dall'IARU né revisionata o certificata dall'ARI – Associazione Radioamatori Italiani. Fa fede
-l'edizione inglese.
+Il testo è tradotto in italiano senza modifiche di contenuto. Le note del traduttore sono segnalate
+con [N.d.T.]. Le formule operative usate in aria (chiamate, esempi di QSO) sono lasciate nella forma
+originale. Traduzione realizzata con l'ausilio di strumenti di intelligenza artificiale.
 
 Bozza 0.1 · novembre 2026 · Composto in Source Serif e Source Sans.\par}
 \clearpage
