@@ -1,11 +1,12 @@
-% Copertina per la stampa in brossura 17x24 cm: quarta + dorso + prima,
+% Copertina per la stampa in brossura: quarta + dorso + prima,
 % con 3 mm di abbondanza su tutti i lati. Nessuna linea guida o segno di taglio.
-% Lo spessore del dorso dipende da carta e numero di pagine: si imposta così
-%   xelatex "\def\eopspine{5.5}\input{copertina-17x24}"
-% (valore in mm; senza \def vale 5.5 mm).
+% Larghezza del formato rifilato e spessore del dorso (in mm) si impostano così:
+%   xelatex "\def\eoptrimw{165}\def\eopspine{5.5}\input{copertina-stampa}"
+% (senza \def: 165 mm di larghezza, 240 mm di altezza, dorso 5,5 mm).
+\ifdefined\eoptrimw\else\def\eoptrimw{165}\fi
 \ifdefined\eopspine\else\def\eopspine{5.5}\fi
 \ifdefined\eopguides\else\def\eopguides{0}\fi
-\newdimen\eoppw \eoppw=\dimexpr 346mm+\eopspine mm\relax
+\newdimen\eoppw \eoppw=\dimexpr 2\dimexpr\eoptrimw mm\relax+6mm+\eopspine mm\relax
 \documentclass{article}
 \usepackage{fontspec}
 \usepackage{tikz}
@@ -20,6 +21,8 @@
 \newfontfamily\eopcoverreg{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Regular,ItalicFont=*-It]
 % testo della copertina: niente sillabazione, righe a bandiera
 \newcommand{\eopnohyph}{\hyphenpenalty=10000 \exhyphenpenalty=10000 \raggedright}
+% colori in RGB: Ghostscript li converte in CMYK FOGRA51 insieme all'immagine,
+% così fondo e foto finiscono con gli stessi valori di inchiostro
 \definecolor{eopteal}{HTML}{0097B2}
 \definecolor{eopcream}{HTML}{FCE8A2}
 
@@ -28,17 +31,23 @@
   % origine: angolo in basso a sinistra del foglio (abbondanza compresa)
   \coordinate (O) at (current page.south west);
   \def\S{\eopspine}
+  \pgfmathsetmacro\xs{\eoptrimw+3}               % piega quarta/dorso
+  \pgfmathsetmacro\xf{\eoptrimw+3+\eopspine}     % piega dorso/prima
+  \pgfmathsetmacro\xc{\xf+\eoptrimw/2}           % centro della prima
+  \pgfmathsetmacro\xr{2*\eoptrimw+6+\eopspine}   % bordo destro del foglio
+  \pgfmathsetmacro\tw{\eoptrimw-24}              % giustezza del titolo in prima (12 mm dai bordi)
+  \pgfmathsetmacro\bw{\eoptrimw-36}              % giustezza dei testi in quarta
   % ---- fondo azzurro: quarta e dorso ----
-  \fill[eopteal] (O) rectangle ([xshift=173mm+\S mm,yshift=246mm]O);
+  \fill[eopteal] (O) rectangle ([xshift=\xf mm,yshift=246mm]O);
   % ---- prima di copertina: immagine centrata sul rifilo, tagliata ai lati ----
   \begin{scope}
-    \clip ([xshift=173mm+\S mm]O) rectangle ([xshift=346mm+\S mm,yshift=246mm]O);
-    \node[inner sep=0pt] at ([xshift=258mm+\S mm,yshift=123mm]O)
+    \clip ([xshift=\xf mm]O) rectangle ([xshift=\xr mm,yshift=246mm]O);
+    \node[inner sep=0pt] at ([xshift=\xc mm,yshift=123mm]O)
       {\includegraphics[height=246mm]{img/cover-clean.jpg}};
   \end{scope}
   % titolo
-  \node[anchor=north,text width=150mm,align=center,inner sep=0pt]
-    at ([xshift=258mm+\S mm,yshift=246mm-20mm]O)
+  \node[anchor=north,text width=\tw mm,align=center,inner sep=0pt]
+    at ([xshift=\xc mm,yshift=246mm-20mm]O)
     {\color{eopcream}{\eopcoverreg\fontsize{19}{24}\selectfont International Amateur Radio Union\par}
      \vspace{3mm}{\eopcoverbold\fontsize{28}{33}\selectfont Etica e procedure operative\\per il radioamatore\par}
      \vspace{5mm}{\eopcoverreg\fontsize{14}{17}\selectfont Quarta edizione\par}
@@ -48,21 +57,21 @@
   % riquadro "non ufficiale"
   \node[anchor=south east,draw=eopcream,line width=0.8pt,rounded corners=3pt,
         fill=eopteal!85!black,inner xsep=8pt,inner ysep=6pt,text width=36mm,align=center]
-    at ([xshift=346mm+\S mm-13mm,yshift=15mm]O)
+    at ([xshift=\xr mm-13mm,yshift=15mm]O)
     {\color{eopcream}\sffamily\fontsize{8}{10.5}\selectfont
      \textbf{TRADUZIONE ITALIANA\\NON UFFICIALE}\\[2pt]
      per uso personale\\non approvata da IARU né da ARI};
   % ---- dorso: testo dal basso verso l'alto, solo se c'è spazio ----
-  \pgfmathsetmacro\eopspinefs{min(11,1.75*\eopspine)}
+  \pgfmathsetmacro\eopspinefs{min(11,1.55*\eopspine)}
   \ifdim\eopspine mm>3.9mm
     \node[rotate=90,inner sep=0pt,anchor=center]
-      at ([xshift=173mm+0.5*\S mm,yshift=123mm]O)
+      at ([xshift=\xs mm+0.5*\S mm,yshift=123mm]O)
       {\color{eopcream}\fontsize{\eopspinefs}{\eopspinefs}\selectfont
        {\eopcoverbold Etica e procedure operative per il radioamatore}%
        \hspace{0.9em}{\eopcoverreg IARU · Quarta edizione}};
   \fi
   % ---- quarta di copertina ----
-  \node[anchor=north west,text width=134mm,inner sep=0pt]
+  \node[anchor=north west,text width=\bw mm,inner sep=0pt]
     at ([xshift=21mm,yshift=246mm-25mm]O)
     {\eopnohyph\color{eopcream}
      {\eopcoverbold\fontsize{16.5}{20}\selectfont Etica e procedure operative per il radioamatore\par}
@@ -72,7 +81,7 @@
      Il riferimento dell'IARU su come comportarsi in aria: ascoltare prima di trasmettere,
      condurre un QSO in fonia, in CW e nei modi digitali, partecipare a pileup e contest,
      rispettare i piani di banda e convivere con gli altri utenti dello spettro radio.\par}};
-  \node[anchor=south west,text width=134mm,inner sep=0pt]
+  \node[anchor=south west,text width=\bw mm,inner sep=0pt]
     at ([xshift=21mm,yshift=24mm]O)
     {\eopnohyph\color{eopcream}\eopcoverreg\fontsize{8.5}{12}\selectfont
      Traduzione italiana non ufficiale di \emph{Ethics and Operating Procedures for the Radio Amateur},
@@ -82,10 +91,13 @@
      \vspace{2.5mm}github.com/BBerry2020/iaru-eop-it\par};
   % ---- linee guida (solo per l'anteprima, mai nel file di stampa) ----
   \ifnum\eopguides=1
-    \draw[red,line width=0.3pt] ([xshift=3mm,yshift=3mm]O) rectangle ([xshift=343mm+\S mm,yshift=243mm]O);
-    \draw[red,dashed,line width=0.3pt] ([xshift=173mm]O) -- ([xshift=173mm,yshift=246mm]O)
-      ([xshift=173mm+\S mm]O) -- ([xshift=173mm+\S mm,yshift=246mm]O);
+    \draw[red,line width=0.3pt] ([xshift=3mm,yshift=3mm]O) rectangle ([xshift=\xr mm-3mm,yshift=243mm]O);
+    \draw[red,dashed,line width=0.3pt] ([xshift=\xs mm]O) -- ([xshift=\xs mm,yshift=246mm]O)
+      ([xshift=\xf mm]O) -- ([xshift=\xf mm,yshift=246mm]O);
   \fi
 \end{tikzpicture}
+\null
+% seconda pagina: 2ª e 3ª di copertina (interno), lasciate bianche come chiede 4graph
+\newpage
 \null
 \end{document}

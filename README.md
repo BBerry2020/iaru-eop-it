@@ -25,6 +25,13 @@ Servono Python 3, pandoc 3 e XeLaTeX (TeX Live con `polyglossia` e i pattern di 
 ./build/build.sh
 ```
 
+### File per la stampa in brossura (16,5×24 cm)
+
+`./build/build-stampa.sh [dorso in mm]` genera in `dist/stampa-165x240/` l'interno (pagine singole)
+e la copertina (2 pagine: esterno con dorso, interno bianco), con 3 mm di abbondanza,
+in CMYK FOGRA51 (PSO Coated v3) e PDF/X-3, secondo le linee guida di 4graph.
+Servono anche Ghostscript e il profilo `PSOcoated_v3.icc` (pacchetto `icc-profiles` su Debian/Ubuntu).
+
 ## Licenze
 
 - **Testo originale:** © 2026 International Amateur Radio Union Region 1, licenza

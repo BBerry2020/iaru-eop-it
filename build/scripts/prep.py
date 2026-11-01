@@ -200,7 +200,7 @@ def wrap_pair(md, a, b, wa, wb):
         end += len(line) + 1
     return md[:ia] + "\n::: {.sbs wa=%s wb=%s}\n\n" % (wa, wb) + md[ia:end+1] + "\n:::\n" + md[end+1:]
 
-md = wrap_pair(md, "11-A", "11-B", "0.53", "0.43")
+md = wrap_pair(md, "11-A", "11-B", "0.52", "0.45")
 md = wrap_pair(md, "13-A", "13-B", "0.44", "0.52")
 
 
