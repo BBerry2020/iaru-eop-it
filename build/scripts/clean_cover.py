@@ -23,5 +23,6 @@ soft = cv2.GaussianBlur(mask, (0,0), 2.5)
 soft = np.clip(soft*1.6, 0, 1)[..., None]
 res = (im*(1-soft) + bg[None,None,:]*soft).astype(np.uint8)
 cv2.imwrite(dbg, (soft[...,0]*255).astype(np.uint8))
+res = res[10:-10, 10:-10]  # toglie il filo bianco ai bordi dell'immagine originale
 cv2.imwrite(out, res, [cv2.IMWRITE_JPEG_QUALITY, 93])
 print("bg BGR", bg)

@@ -6,3 +6,8 @@ build/*.log
 build/*.out
 build/*.toc
 build/main.pdf
+# file generati per la stampa 17x24
+build/main-17x24.tex
+build/main-17x24.pdf
+build/copertina-17x24-out.pdf
+build/cop-preview.pdf

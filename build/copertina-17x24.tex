@@ -1,0 +1,86 @@
+% Copertina per la stampa in brossura 17x24 cm: quarta + dorso + prima,
+% con 3 mm di abbondanza su tutti i lati. Nessuna linea guida o segno di taglio.
+% Lo spessore del dorso dipende da carta e numero di pagine: si imposta così
+%   xelatex "\def\eopspine{5.5}\input{copertina-17x24}"
+% (valore in mm; senza \def vale 5.5 mm).
+\ifdefined\eopspine\else\def\eopspine{5.5}\fi
+\ifdefined\eopguides\else\def\eopguides{0}\fi
+\newdimen\eoppw \eoppw=\dimexpr 346mm+\eopspine mm\relax
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage[paperwidth=\the\eoppw,paperheight=246mm,margin=0pt]{geometry}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\newfontfamily\eopcoverfont{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Light,BoldFont=*-Regular,WordSpace={1.9,1.4,1}]
+\setsansfont{SourceSans3}[Path=fonts/,Extension=.otf,
+  UprightFont=*-Regular,ItalicFont=*-It,BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt]
+\definecolor{eopteal}{HTML}{0097B2}
+\definecolor{eopcream}{HTML}{FCE8A2}
+
+\begin{document}
+\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
+  % origine: angolo in basso a sinistra del foglio (abbondanza compresa)
+  \coordinate (O) at (current page.south west);
+  \def\S{\eopspine}
+  % ---- fondo azzurro: quarta e dorso ----
+  \fill[eopteal] (O) rectangle ([xshift=173mm+\S mm,yshift=246mm]O);
+  % ---- prima di copertina: immagine centrata sul rifilo, tagliata ai lati ----
+  \begin{scope}
+    \clip ([xshift=173mm+\S mm]O) rectangle ([xshift=346mm+\S mm,yshift=246mm]O);
+    \node[inner sep=0pt] at ([xshift=258mm+\S mm,yshift=123mm]O)
+      {\includegraphics[height=246mm]{img/cover-clean.jpg}};
+  \end{scope}
+  % titolo
+  \node[anchor=north,text width=150mm,align=center,inner sep=0pt]
+    at ([xshift=258mm+\S mm,yshift=246mm-20mm]O)
+    {\color{eopcream}\eopcoverfont\fontsize{24}{32}\selectfont
+     International Amateur Radio Union\\
+     Etica e procedure operative\\
+     per il radioamatore\par
+     \vspace{5mm}{\fontsize{14}{17}\selectfont Quarta edizione}\par
+     \vspace{4mm}{\fontsize{10.5}{15}\selectfont
+       Ahmad AlHoli 9K2DB · Marco Colombo IU2DXF\\
+       Frode Igland LA6VQ · Rafal Lukawiecki EI6LA · Ian Suart GM4AUP}};
+  % riquadro "non ufficiale"
+  \node[anchor=south east,draw=eopcream,line width=0.8pt,rounded corners=3pt,
+        fill=eopteal!85!black,inner xsep=8pt,inner ysep=6pt,text width=36mm,align=center]
+    at ([xshift=346mm+\S mm-13mm,yshift=15mm]O)
+    {\color{eopcream}\sffamily\fontsize{8}{10.5}\selectfont
+     \textbf{TRADUZIONE ITALIANA\\NON UFFICIALE}\\[2pt]
+     per uso personale\\non approvata da IARU né da ARI};
+  % ---- dorso: testo dal basso verso l'alto, solo se c'è spazio ----
+  \ifdim\eopspine mm>3.9mm
+    \node[rotate=90,inner sep=0pt,anchor=center]
+      at ([xshift=173mm+0.5*\S mm,yshift=123mm]O)
+      {\color{eopcream}\sffamily\fontsize{7}{8}\selectfont
+       \textbf{IARU} \enspace Etica e procedure operative per il radioamatore
+       \enspace·\enspace Quarta edizione \enspace·\enspace traduzione non ufficiale};
+  \fi
+  % ---- quarta di copertina ----
+  \node[anchor=north west,text width=128mm,align=left,inner sep=0pt]
+    at ([xshift=21mm,yshift=246mm-24mm]O)
+    {\color{eopcream}\eopcoverfont\fontsize{17}{22}\selectfont
+     Etica e procedure operative\\per il radioamatore\par
+     \vspace{3mm}{\sffamily\fontsize{10}{14}\selectfont
+     Il riferimento dell'IARU su come comportarsi in aria: ascoltare prima di trasmettere,
+     condurre un QSO in fonia, CW e modi digitali, partecipare a pileup e contest,
+     rispettare i piani di banda e convivere con gli altri utenti dello spettro.\par}};
+  \node[anchor=south west,text width=128mm,align=left,inner sep=0pt]
+    at ([xshift=21mm,yshift=25mm]O)
+    {\color{eopcream}\sffamily\fontsize{8.5}{12}\selectfont
+     Traduzione italiana non ufficiale di \emph{Ethics and Operating Procedures for the
+     Radio Amateur}, Fourth Edition, Revision 4.2.0 © 2026 International Amateur Radio
+     Union Region 1. Licenza CC BY-SA 4.0.\\[4pt]
+     Non approvata dall'IARU né certificata dall'ARI. In caso di differenze fa fede l'edizione inglese.\\[4pt]
+     github.com/BBerry2020/iaru-eop-it};
+  % ---- linee guida (solo per l'anteprima, mai nel file di stampa) ----
+  \ifnum\eopguides=1
+    \draw[red,line width=0.3pt] ([xshift=3mm,yshift=3mm]O) rectangle ([xshift=343mm+\S mm,yshift=243mm]O);
+    \draw[red,dashed,line width=0.3pt] ([xshift=173mm]O) -- ([xshift=173mm,yshift=246mm]O)
+      ([xshift=173mm+\S mm]O) -- ([xshift=173mm+\S mm,yshift=246mm]O);
+  \fi
+\end{tikzpicture}
+\null
+\end{document}
