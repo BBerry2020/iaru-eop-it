@@ -6,9 +6,9 @@
 set -e
 cd "$(dirname "$0")"
 SPINE=${1:-5.5}
-python3 scripts/prep.py ../src/eop-it.md prepped.md
-pandoc prepped.md -f markdown+raw_tex+raw_attribute+fenced_divs -t latex \
-  --lua-filter scripts/eop.lua -o body.tex
+python3 scripts/prep.py ../src/eop-it.md prepped-17x24.md print
+pandoc prepped-17x24.md -f markdown+raw_tex+raw_attribute+fenced_divs -t latex \
+  --lua-filter scripts/eop.lua -o body-17x24.tex
 python3 scripts/make_print.py
 for i in 1 2 3; do xelatex -interaction=nonstopmode -halt-on-error main-17x24.tex > /dev/null; done
 for i in 1 2; do

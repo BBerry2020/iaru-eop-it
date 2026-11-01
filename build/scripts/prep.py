@@ -214,7 +214,37 @@ def move_fig_before(md, key, anchor):
     a = md.index(anchor)
     return md[:a] + block + "\n\n" + md[a:]
 
-md = move_fig_before(md, "5-i", "È fondamentale anche rivedere")
+# dove ancorare le figure, per versione (schermo o stampa 17x24):
+# ogni figura sta accanto al testo che la cita e riempie la pagina senza lasciare vuoti
+import json, os
+LAYOUT = sys.argv[3] if len(sys.argv) > 3 else "screen"
+ANCHORS = {
+    "screen": {"5-i": "Se sembra che la causa sia la tua stazione",
+               "5-ii": "È fondamentale anche rivedere"},
+    "print": {"5-i": "Se sembra che la causa sia la tua stazione",
+              "5-ii": "I tempi di salita e di discesa"},
+}
+if os.environ.get("EOP_ANCHORS"):  # per le prove: {"5-i": "..."}
+    ANCHORS[LAYOUT] = json.loads(os.environ["EOP_ANCHORS"])
+for key, anchor in ANCHORS[LAYOUT].items():
+    md = move_fig_before(md, key, anchor)
+
+
+def move_pair_before(md, key, anchor):
+    """Sposta un blocco di tabelle affiancate (non spezzabile) prima di `anchor`."""
+    c = md.index("\\eoptablecaption{%s}" % key)
+    s = md.rfind("\n::: {.sbs", 0, c)
+    e = md.index("\n:::\n", c) + len("\n:::\n")
+    block = md[s:e]
+    md = md[:s] + "\n" + md[e:]
+    a = md.index(anchor)
+    return md[:a] + block.lstrip("\n") + "\n" + md[a:]
+
+
+# tabelle affiancate: subito dopo il paragrafo che le annuncia, se serve a evitare vuoti
+PAIR_ANCHORS = {"screen": {}, "print": {"11-A": "Quando parli, accentua la sillaba"}}
+for key, anchor in PAIR_ANCHORS[LAYOUT].items():
+    md = move_pair_before(md, key, anchor)
 
 # bold uppercase run-in labels (AMICIZIA., R – LEGGIBILITÀ (READABILITY).) -> small caps
 md = re.sub(r"\*\*([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ ,'’()–-]+\.)\*\*",

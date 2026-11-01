@@ -25,7 +25,9 @@ function Div(el)
         else
           txt = txt:gsub('\\begin{eoptable}', '\\begin{eopsmalltable}')
                    :gsub('\\end{eoptable}', '\\end{eopsmalltable}')
-                   :gsub('\\endhead\n', '')
+                   :gsub('%%%%EOPCAP:%d+:%%%%\n', '')
+                   :gsub('\\endfirsthead\n.-\\endhead\n', '')
+                   :gsub('\\nopagebreak\n', '')
           table.insert(cur, txt)
         end
       end
@@ -120,13 +122,43 @@ function Table(tbl)
   table.insert(lines, '\\begin{eoptable}{' .. spec .. '}')
   local function row_tex(r, header)
     local cells = {}
-    for _, cell in ipairs(r.cells) do
-      local s = cell_latex(cell)
-      if header then s = '\\eopth{' .. s .. '}' end
+    local notes = {}
+    for c, cell in ipairs(r.cells) do
+      -- le note a piè di pagina escono dalla cella: \footnotemark nella cella e
+      -- \footnotetext subito dopo la riga, così la tabella può spezzarsi tra due pagine
+      local contents = cell.contents:walk({
+        Note = function(n)
+          table.insert(notes, (latex(n.content):gsub('%s+$', '')))
+          return pandoc.RawInline('latex', '\\footnotemark{}')
+        end
+      })
+      local s = (latex(contents):gsub('%s+$', ''))
+      if header then
+        -- intestazione centrata in verticale nella sua cella
+        local pre = (c == 1) and '@{}' or ''
+        local post = (c == ncols) and '@{}' or ''
+        s = string.format('\\multicolumn{1}{%s>{\\raggedright\\arraybackslash}m{\\dimexpr %.4f\\linewidth-2\\tabcolsep\\relax}%s}{\\eopth{%s}}',
+          pre, w[c] / total, post, s)
+      end
       table.insert(cells, s)
     end
-    return table.concat(cells, ' & ') .. ' \\\\'
+    local row = table.concat(cells, ' & ') .. ' \\\\'
+    if #notes > 0 then
+      local nt = '\\noalign{\\addtocounter{footnote}{-' .. #notes .. '}'
+      for _, n in ipairs(notes) do
+        nt = nt .. '\\stepcounter{footnote}\\footnotetext{' .. n .. '}'
+      end
+      row = row .. '\n' .. nt .. '}'
+    end
+    return row
   end
+  -- prima intestazione (con la didascalia) e intestazione ripetuta sulle pagine successive
+  table.insert(lines, '%%EOPCAP:' .. ncols .. ':%%')
+  for _, r in ipairs(head_rows) do
+    table.insert(lines, '\\rowcolor{eophead}' .. row_tex(r, true))
+  end
+  table.insert(lines, '\\endfirsthead')
+  table.insert(lines, '%%EOPCAPCONT:' .. ncols .. ':%%')
   for _, r in ipairs(head_rows) do
     table.insert(lines, '\\rowcolor{eophead}' .. row_tex(r, true))
   end
@@ -142,9 +174,44 @@ function Table(tbl)
       prefix = '\\rowcolor{eopzebra}'
     end
     table.insert(lines, prefix .. row_tex(r, false))
+    -- didascalia e intestazione mai da sole in fondo alla pagina: almeno due righe con loro
+    if idx <= 1 and #body_rows > 2 then table.insert(lines, '\\nopagebreak') end
   end
   table.insert(lines, '\\end{eoptable}')
   return pandoc.RawBlock('latex', table.concat(lines, '\n'))
+end
+
+-- La didascalia "Tabella X: ..." entra nella tabella: resta sempre attaccata
+-- all'intestazione e si ripete, con "(continua)", quando la tabella va a pagina nuova.
+local function caprow(n, num, txt)
+  return string.format('\\multicolumn{%d}{@{}>{\\raggedright\\arraybackslash}p{\\dimexpr\\linewidth-2\\tabcolsep\\relax}@{}}{\\eopcaprow{%s}{%s}}\\\\[3pt]', n, num, txt)
+end
+
+function Blocks(blocks)
+  local out = pandoc.List()
+  local i = 1
+  while i <= #blocks do
+    local b, nxt = blocks[i], blocks[i + 1]
+    local num, txt
+    if b.t == 'RawBlock' then
+      num, txt = b.text:match('^%s*\\eoptablecaption{([^}]*)}{(.*)}%s*$')
+    end
+    if num and nxt and nxt.t == 'RawBlock' and nxt.text:find('%%%%EOPCAP:') then
+      local s = nxt.text
+      s = s:gsub('%%%%EOPCAP:(%d+):%%%%', function(n) return caprow(tonumber(n), num, txt) end)
+      s = s:gsub('%%%%EOPCAPCONT:(%d+):%%%%', function(n)
+        return caprow(tonumber(n), num, txt .. ' \\textit{(continua)}') end)
+      out:insert(pandoc.RawBlock('latex', s))
+      i = i + 2
+    else
+      if b.t == 'RawBlock' and b.text:find('%%%%EOPCAP') then
+        b = pandoc.RawBlock('latex', (b.text:gsub('%%%%EOPCAP[A-Z]*:%d+:%%%%\n', '')))
+      end
+      out:insert(b)
+      i = i + 1
+    end
+  end
+  return out
 end
 
 -- URL-like links: let the visible path break anywhere (xurl)

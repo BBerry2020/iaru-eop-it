@@ -16,7 +16,7 @@
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont{SourceSerifPro}[Path=fonts/,Extension=.otf,
   UprightFont=*-Regular,ItalicFont=*-It,BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt,
-  Numbers=OldStyle]
+  Numbers=Lining]
 \setsansfont{SourceSans3}[Path=fonts/,Extension=.otf,
   UprightFont=*-Regular,ItalicFont=*-It,BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt,
   FontFace={l}{n}{*-Light},FontFace={l}{it}{*-LightIt},FontFace={b}{n}{*-Bold}]
@@ -57,10 +57,18 @@
 \usepackage{graphicx}
 \usepackage{longtable,array}
 \setlength{\LTleft}{0pt}\setlength{\LTright}{0pt}
-\setlength{\LTpre}{2pt}\setlength{\LTpost}{10pt}
+\setlength{\LTpre}{8pt}\setlength{\LTpost}{10pt}
 \usepackage{tikz}
 \usepackage{fancyhdr}
 \usepackage{needspace}
+% needspace di serie mette \penalty-100: con \raggedbottom TeX preferisce spezzare lì
+% anche quando il resto ci starebbe, e lascia spazi bianchi a fondo pagina.
+% Questa versione va a pagina nuova solo se lo spazio manca davvero.
+\makeatletter
+\renewcommand{\needspace}[1]{\par\penalty\z@\begingroup\setlength{\dimen@}{#1}%
+  \dimen@ii\pagegoal\advance\dimen@ii-\pagetotal
+  \ifdim\dimen@>\dimen@ii\ifdim\dimen@ii>\z@\vfil\fi\break\fi\endgroup}
+\makeatother
 \usepackage{multicol}
 \usepackage{enumitem}
 \usepackage{fancyvrb}
@@ -150,7 +158,7 @@
   \vfill\vfill\clearpage}
 
 \newcommand{\eopchapter}[2]{%
-  \par\needspace{0.16\textheight}\addvspace{20pt}%
+  \par\needspace{0.12\textheight}\addvspace{20pt}%
   {\color{eopteal}\rule{\linewidth}{0.5pt}}\par\nopagebreak\vspace{4pt}%
   \phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{#1}#2}%
   \renewcommand{\eopchapmark}{#2}\renewcommand{\eopsecmark}{}%
@@ -207,13 +215,15 @@
 \newenvironment{eoptable}[1]{%
   \par\small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
   \begin{longtable}{#1}}{\end{longtable}\par}
+% didascalia dentro la tabella (resta attaccata all'intestazione, si ripete con "continua")
+\newcommand{\eopcaprow}[2]{{\sffamily\color{eopblue}\textbf{Tabella #1:} #2}}
 \newenvironment{eopsmalltable}[1]{%
   \small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
   \begin{tabular}{#1}}{\end{tabular}}
 \newcommand{\eopth}[1]{{\sffamily\bfseries\color{eopblue}#1}}
 \newcommand{\eoptablecaption}[2]{%
   \par\needspace{7\baselineskip}\addvspace{6pt}%
-  {\sffamily\small\color{eopblue}\textbf{Tabella #1:} #2\par}\nopagebreak\vspace{1pt}}
+  {\raggedright\sffamily\small\color{eopblue}\textbf{Tabella #1:} #2\par}\nopagebreak\vspace{1pt}}
 
 \usepackage{wrapfig}
 % larghezza di ogni figura come frazione della giustezza
@@ -312,47 +322,37 @@ Ahmad AlHoli 9K2DB\\Marco Colombo IU2DXF\\Frode Igland LA6VQ\\Ian Suart GM4AUP\p
 {\sffamily\small\color{eopblue}\eopsc{autore e curatore}\par}\vspace{2pt}
 Rafal Lukawiecki EI6LA\par
 \end{minipage}\par
-\vspace{10mm}
-\begin{tcolorbox}[enhanced,colback=eopnoteback,colframe=eopteal,boxrule=0.6pt,arc=2pt,
-  left=9pt,right=9pt,top=7pt,bottom=7pt,fontupper=\small]
-{\sffamily\bfseries\color{eopblue}TRADUZIONE ITALIANA NON UFFICIALE – PER USO PERSONALE}\par\vspace{3pt}
-Questa traduzione è stata realizzata a titolo personale, per studio e consultazione.
-Non è una traduzione ufficiale dell'IARU e non è stata revisionata, approvata né certificata
-dall'ARI – Associazione Radioamatori Italiani. In caso di differenze fa fede l'edizione originale
-in lingua inglese, disponibile sul
-\href{https://www.iaru-r1.org/on-the-air/eop/}{sito di IARU Region 1}.
-\end{tcolorbox}
-\vspace{3mm}
-{\small Repository della traduzione:
-\href{https://github.com/BBerry2020/iaru-eop-it}{\nolinkurl{github.com/BBerry2020/iaru-eop-it}}\par}
 \vfill
-{\color{eopteal}\rule{\linewidth}{0.4pt}}\par\vspace{6pt}
-{\footnotesize\setlength{\parskip}{5pt}
-\textbf{Edizione originale.} \emph{International Amateur Radio Union Ethics and Operating Procedures
-for the Radio Amateur}, Fourth Edition, Revision 4.2.0. Copyright © 2026 International Amateur
-Radio Union Region 1. Rilasciata con licenza Creative Commons Attribuzione – Condividi allo stesso
-modo 4.0 Internazionale (CC BY-SA 4.0):
+{\color{eopteal}\rule{\linewidth}{0.4pt}}\par\vspace{7pt}
+{\small\setlength{\parskip}{6pt}
+\newcommand{\eopcplabel}[1]{{\sffamily\bfseries\color{eopblue}#1}}%
+\eopcplabel{Traduzione italiana non ufficiale, per uso personale.}
+Realizzata a titolo personale, per studio e consultazione: non è una traduzione ufficiale
+dell'IARU e non è stata revisionata, approvata né certificata dall'ARI – Associazione
+Radioamatori Italiani. In caso di differenze fa fede l'edizione originale inglese.
+Copyright © 2026 i contributori del repository
+\href{https://github.com/BBerry2020/iaru-eop-it}{\nolinkurl{github.com/BBerry2020/iaru-eop-it}},
+con licenza CC~BY-SA~4.0 come richiesto dalla licenza dell'originale. Il testo è tradotto senza
+modifiche di contenuto; le note del traduttore sono segnalate con [N.d.T.] e le formule operative
+usate in aria (chiamate, esempi di QSO) sono lasciate nella forma originale. Traduzione realizzata
+con l'ausilio di strumenti di intelligenza artificiale.
+
+\eopcplabel{Edizione originale.} \emph{International Amateur Radio Union Ethics and Operating
+Procedures for the Radio Amateur}, Fourth Edition, Revision~4.2.0. Copyright © 2026 International
+Amateur Radio Union Region~1, licenza Creative Commons Attribuzione – Condividi allo stesso modo
+4.0 Internazionale (CC~BY-SA~4.0):
 \href{https://creativecommons.org/licenses/by-sa/4.0/deed.it}{\nolinkurl{creativecommons.org/licenses/by-sa/4.0}}.
-Pagina ufficiale dell'edizione originale:
+Pagina ufficiale:
 \href{https://www.iaru-r1.org/on-the-air/eop/}{Codes of Conduct | International Amateur Radio Union (IARU)}.
-
-Pubblicata da International Amateur Radio Union Region 1 (IARU R1), c/o Baer-Nutz-AG,
+Pubblicata da International Amateur Radio Union Region~1 (IARU~R1), c/o Baer-Nutz-AG,
 Scheuermattstrasse 8A, CH-6330 Cham ZG, Svizzera ·
-\href{mailto:eop@iaru-r1.org}{eop@iaru-r1.org} · ISBN 978-3-9526620-0-7 (PDF eBook, inglese).
-Questa traduzione non ha un ISBN proprio.
+\href{mailto:eop@iaru-r1.org}{eop@iaru-r1.org} · ISBN 978-3-9526620-0-7 (PDF eBook, inglese);
+questa traduzione non ha un ISBN proprio.
 
-\textbf{Copertina.} Immagine di Silvano Ancelotti © 2025, usata secondo la licenza CC BY 4.0
-(\href{https://creativecommons.org/licenses/by/4.0}{\nolinkurl{creativecommons.org/licenses/by/4.0}});
-in questa edizione è stata modificata rimuovendo il testo originale e il logo IARU.
+\eopcplabel{Copertina.} Immagine di Silvano Ancelotti © 2025, usata secondo la licenza
+\href{https://creativecommons.org/licenses/by/4.0}{CC~BY~4.0}; in questa edizione è stata modificata rimuovendo il testo originale e il logo IARU.
 
-\textbf{Traduzione italiana.} Copyright © 2026 i contributori del repository
-\href{https://github.com/BBerry2020/iaru-eop-it}{\nolinkurl{github.com/BBerry2020/iaru-eop-it}}.
-Rilasciata anch'essa con licenza CC BY-SA 4.0, come richiesto dalla licenza dell'originale.
-Il testo è tradotto in italiano senza modifiche di contenuto. Le note del traduttore sono segnalate
-con [N.d.T.]. Le formule operative usate in aria (chiamate, esempi di QSO) sono lasciate nella forma
-originale. Traduzione realizzata con l'ausilio di strumenti di intelligenza artificiale.
-
-Bozza 0.1 · novembre 2026 · Composto in Source Serif e Source Sans.\par}
+{\color{eopblue!80}Bozza 0.1 · novembre 2026 · Composto in Source Serif e Source Sans.}\par}
 \clearpage
 
 % ================= INDICE =================

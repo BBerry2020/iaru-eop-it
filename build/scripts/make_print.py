@@ -60,6 +60,9 @@ sub(r"\begin{multicols}{2}\fontsize{7}{7.95}\selectfont",
 sub(r"\setlength{\eopabbrsep}{2.5pt plus 1.5pt}", r"\setlength{\eopabbrsep}{ABBRSEP}")
 t = t.replace("ABBRFS", "8.8}{10.5").replace("ABBRSEP", "5pt plus 1.5pt")
 
+# testo preparato apposta per la stampa (figure ancorate in punti diversi)
+sub(r"\input{body.tex}", r"\input{body-17x24.tex}")
+
 # niente copertina e quarta: vanno nel file della copertina
 cut("% ================= COPERTINA =================",
     "% ================= FRONTESPIZIO",
