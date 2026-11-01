@@ -84,7 +84,7 @@ Per i codici Q, come QRM, vedi la Tabella 10-A; per le abbreviazioni operative, 
 | HF | Alta frequenza (High Frequency) |
 | IARP | Permesso internazionale di radioamatore (International Amateur Radio Permit) |
 | IARU | Unione internazionale dei radioamatori (International Amateur Radio Union) |
-| IARUMS | Servizio di monitoraggio IARU (IARU Monitoring Service) |
+| IARUMS | Sistema di monitoraggio IARU (IARU Monitoring System) |
 | ICAO | Organizzazione internazionale dell'aviazione civile (International Civil Aviation Organization) |
 | ICNIRP | Commissione internazionale per la protezione dalle radiazioni non ionizzanti |
 | IEC | Commissione elettrotecnica internazionale (International Electrotechnical Commission) |
@@ -146,9 +146,10 @@ Questa unità non è nata per caso. In un secolo che ha visto guerre, conflitti 
 
 Invito ogni radioamatore a leggere queste pagine, a condividerle e a seguirle. Diamo il buon esempio, non solo agli altri operatori di oggi, ma anche ai radioamatori del futuro.
 
-Abbiamo appena concluso cento anni straordinari. Ecco al prossimo secolo di comunicazioni rispettose e responsabili!
+Abbiamo appena concluso cento anni straordinari. Brindiamo al prossimo secolo di comunicazioni rispettose e responsabili!
 
-*Sylvain Azarian F4GKR* *Presidente dell'International Amateur Radio Union Region 1*
+*Sylvain Azarian F4GKR*\
+*Presidente dell'International Amateur Radio Union Region 1*
 
 ## Ringraziamenti
 
@@ -208,7 +209,7 @@ Risolvere un conflitto è più difficile che evitarlo. Molti conflitti si potreb
 
 ## 3 Scopi del radiantismo
 
-L'ARTICOLO 1.56 DEL REGOLAMENTO DELLE RADIOCOMUNICAZIONI DELL'ITU definisce il servizio di radioamatore come "un servizio di radiocomunicazione avente per scopo:
+L'ARTICOLO 1.56 del Regolamento delle radiocomunicazioni dell'ITU definisce il servizio di radioamatore come "un servizio di radiocomunicazione avente per scopo:
 
 - l'istruzione individuale
 - l'intercomunicazione
@@ -391,7 +392,7 @@ Se comunque una persona ti causa interferenze dannose che non si risolvono dopo 
 
 ⁸ Purtroppo è facile acquistare trasmettitori radio che non rispettano né le norme EMC né quelle di sicurezza. Si trovano su mercati online economici e poco regolamentati.
 
-⁹ Vedi [enams.de](https://enams.de) e cerca su [arrl.com](https://www.arrl.org)
+⁹ Vedi [enams.de](https://enams.de) e cerca su [arrl.com](https://www.arrl.org).
 
 ¹⁰ Nel radiantismo, il termine modo indica di solito la combinazione dello schema di modulazione, come la modulazione d'ampiezza (AM), e del tipo di contenuto trasmesso, come fonia, telegrafia o dati. Il CW è il più antico modo di comunicazione digitale: vedi i capitoli 13 e 14. Il concetto di modo è legato anche ai tipi di emissione radio: vedi ITU-R SM.1138-3, [www.itu.int/rec/R-REC-SM.1138-3-201910-I/en](https://www.itu.int/rec/R-REC-SM.1138-3-201910-I/en)
 
@@ -421,7 +422,7 @@ Se sospetti che qualcuno stia subendo una scossa elettrica:
 
 1. TOGLI LA CORRENTE prima di toccare la persona
 2. chiama aiuto: componi il numero di emergenza nazionale
-3. inizia la rianimazione cardiopolmonare (RCP), se necessario¹²
+3. inizia la rianimazione cardiopolmonare (RCP, in inglese CPR), se necessario¹²
 
 #### 6.1.2 Funzionamento a batteria
 
@@ -584,7 +585,7 @@ Le condizioni di propagazione cambiano continuamente. I momenti migliori per asc
 
 ¹⁸ Al momento della stesura, i più popolari erano WebSDR, KiwiSDR e OpenWebRX. Vedi [websdr.org](http://websdr.org), [rx.linkfanel.net](http://rx.linkfanel.net) e [receiverbook.de](https://receiverbook.de).
 
-¹⁹ Per esempio, quello dell'Università di Twente a Enschede, nei Paesi Bassi, con WebSDR o KiwiSDR, oppure collegati direttamente a un ricevitore come hackgreensdr.org:8902 o websdr-maasbree.jouwweb.nl
+¹⁹ Per esempio, quello dell'Università di Twente a Enschede, nei Paesi Bassi, con WebSDR o KiwiSDR, oppure collegati direttamente a un ricevitore come [hackgreensdr.org:8902](http://hackgreensdr.org:8902) o [websdr-maasbree.jouwweb.nl](https://websdr-maasbree.jouwweb.nl)
 
 ²⁰ In fonia si usa di solito la banda laterale superiore (USB) sopra i 10 MHz e la banda laterale inferiore (LSB) sotto i 10 MHz. Ci sono eccezioni, come l'USB sulla banda dei 60 m (5 MHz) e molti modi digitali.
 
@@ -725,7 +726,7 @@ LE ABBREVIAZIONI sono molto diffuse nel radiantismo. Rendono la comunicazione pi
 
 ### 10.1 Codici Q
 
-I CODICI Q sono combinazioni standardizzate di tre lettere che iniziano con la lettera Q. Sviluppati tra il 1909 e il 1912, servivano a facilitare le trasmissioni commerciali, velocizzando l'invio dei messaggi in codice Morse e fungendo da lingua internazionale della telegrafia.²⁷ Sono molto usati in CW e in RTTY, e perfino in fonia, perché aiutano operatori che parlano lingue diverse. Ne esistono molti più di quelli riportati qui sotto, ma alcuni operatori potrebbero non capire quelli meno diffusi.²⁸
+I codici Q sono combinazioni standardizzate di tre lettere che iniziano con la lettera Q. Sviluppati tra il 1909 e il 1912, servivano a facilitare le trasmissioni commerciali, velocizzando l'invio dei messaggi in codice Morse e fungendo da lingua internazionale della telegrafia.²⁷ Sono molto usati in CW e in RTTY, e perfino in fonia, perché aiutano operatori che parlano lingue diverse. Ne esistono molti più di quelli riportati qui sotto, ma alcuni operatori potrebbero non capire quelli meno diffusi.²⁸
 
 **Tabella 10-A: codici Q**
 
@@ -845,7 +846,7 @@ L'alfabeto fonetico aiuta anche a far capire informazioni importanti quando i se
 
 ### 11.1 Alfabeto internazionale di compitazione radiotelefonica
 
-L'alfabeto fonetico, noto anche come alfabeto internazionale di compitazione radiotelefonica, alfabeto fonetico NATO o alfabeto fonetico ICAO (Organizzazione internazionale dell'aviazione civile), è usato comunemente da tutti i radioamatori. È riportato nelle due tabelle seguenti. La prima mostra le lettere con la pronuncia ICAO raccomandata dall'ITU. I numeri, invece, non seguono la raccomandazione ITU:⁴⁰ i radioamatori usano per i numeri la pronuncia ICAO,⁴¹ riportata nella seconda tabella.
+L'alfabeto fonetico, noto anche come alfabeto internazionale di compitazione radiotelefonica, alfabeto fonetico NATO o alfabeto fonetico ICAO (Organizzazione internazionale dell'aviazione civile), è usato comunemente da tutti i radioamatori. È riportato nelle tabelle 11-A e 11-B. La prima mostra le lettere con la pronuncia ICAO raccomandata dall'ITU. I numeri, invece, non seguono la raccomandazione ITU:⁴⁰ i radioamatori usano per i numeri la pronuncia ICAO,⁴¹ riportata nella seconda tabella.
 
 Quando parli, accentua la sillaba in maiuscolo. Fai attenzione alla pronuncia raccomandata dei numeri, anche se può suonare insolita a chi è di madrelingua inglese. Per esempio:
 
@@ -854,7 +855,7 @@ Quando parli, accentua la sillaba in maiuscolo. Fai attenzione alla pronuncia ra
 - 4U1UN compitato: Four Uniform One Uniform November
 - 4U1UN pronunciato: FOW-er YOU-nee-form WUN YOU-nee-form no-VEM-ber
 - EI90IRTS compitato: Echo India Nine Zero India Romeo Tango Sierra
-  - EI90IRTS pronunciato: ECK-oh IN-dee-ah NIN-er ZE-RO IN-dee-ah ROW-me-oh TANG-go see-AIR-rah
+- EI90IRTS pronunciato: ECK-oh IN-dee-ah NIN-er ZE-RO IN-dee-ah ROW-me-oh TANG-go see-AIR-rah
 
 &#91;N.d.T.: la pronuncia figurata è quella dell'originale, scritta secondo la grafia inglese.\]
 
@@ -1195,8 +1196,8 @@ Ogni normale QSO comprende uno scambio di rapporti di segnale. Alcuni modi di co
 Ascoltando il CW, sentirai che alcune cifre vengono trasmesse come lettere anziché come numeri, perché alcune lettere si trasmettono più rapidamente dei numeri corrispondenti. Per esempio, il 9 si può trasmettere come la lettera N, e quindi il frequente codice RST 599 diventa 5NN. Questa convenzione si chiama "numeri tagliati" (cut numbers) ed è comune nei contest CW.⁵⁶
 
 - R – LEGGIBILITÀ (READABILITY). È una valutazione di quanto sia facile copiare, cioè capire, correttamente le informazioni trasmesse. È comune che la leggibilità sia imperfetta anche con segnali molto forti, o viceversa.
-- S – INTENSITÀ DEL SEGNALE (SIGNAL STRENGTH). Indica quanto è forte il segnale nel punto di ricezione. Oggi si usano raramente i valori della tabella qui sotto, a meno che il ricevitore non abbia un S-meter: è invece comune riportare il valore indicato dallo strumento.⁵⁷ Se l'S-meter indica un segnale superiore a 9, dovresti riportare il valore in dB indicato dallo strumento. Per esempio, se R è 5 e l'S-meter indica +10 dB sopra il 9, potresti dire 59 plus 10 o 10 over 59. Molti S-meter, però, danno una lettura corretta solo con attenuatori e preamplificatori del ricevitore disattivati, o impostati su un valore specifico, e con il guadagno RF al massimo. Valuta di cambiare brevemente queste impostazioni prima di dare il rapporto sull'intensità del segnale. Quando ricevi un rapporto, ricorda che il valore S ricevuto è il risultato di una combinazione di fattori, compresi la propagazione e le apparecchiature della stazione ricevente, antenne incluse.
-- T – TONO (TONE). Si usa in CW e descrive la qualità della modulazione CW. Questa parte del codice RST è ancora in uso, ma la sua rilevanza è diminuita perché i trasmettitori moderni producono segnali di buona qualità tonale. Poiché il tono è quasi sempre perfetto, ti aspetteresti di ricevere o inviare sempre un valore T di 9. Se usi apparecchiature moderne, anziché storiche o autocostruite, ricevere meno di T9 indica un problema da risolvere. Allo stesso modo, nel caso improbabile in cui senta un tono non perfetto, dovresti inviare un valore diverso da 9. Purtroppo non esiste uno schema universale per segnalare altri problemi dei segnali CW, oggi frequenti, come click di manipolazione e splatter. Se li riscontri, potrebbe essere una buona idea contattare l'altra stazione, magari con mezzi diversi dalla radio, e farglielo presente con garbo. In alcuni modi digitali diversi dal CW si riporta anche una terza cifra, ma con un significato diverso.
+- S – INTENSITÀ DEL SEGNALE (SIGNAL STRENGTH). Indica quanto è forte il segnale nel punto di ricezione. Oggi si usano raramente i valori della tabella qui sotto, a meno che il ricevitore sia privo di S-meter: è invece comune riportare il valore indicato dallo strumento.⁵⁷ Se l'S-meter indica un segnale superiore a 9, dovresti riportare il valore in dB indicato dallo strumento. Per esempio, se R è 5 e l'S-meter indica +10 dB sopra il 9, potresti dire 59 plus 10 o 10 over 59. Molti S-meter, però, danno una lettura corretta solo con attenuatori e preamplificatori del ricevitore disattivati, o impostati su un valore specifico, e con il guadagno RF al massimo. Valuta di cambiare brevemente queste impostazioni prima di dare il rapporto sull'intensità del segnale. Quando ricevi un rapporto, ricorda che il valore S ricevuto è il risultato di una combinazione di fattori, compresi la propagazione e le apparecchiature della stazione ricevente, antenne incluse.
+- T – TONO (TONE). Si usa in CW e descrive la qualità della modulazione CW. Questa parte del codice RST è ancora in uso, ma la sua rilevanza è diminuita perché i trasmettitori moderni producono segnali di buona qualità tonale. Poiché il tono è quasi sempre perfetto, ti aspetteresti di ricevere o inviare sempre un valore T di 9. Se usi apparecchiature moderne, anziché storiche o autocostruite, ricevere meno di T9 indica un problema da risolvere. Allo stesso modo, nel caso improbabile in cui tu senta un tono non perfetto, dovresti inviare un valore diverso da 9. Purtroppo non esiste uno schema universale per segnalare altri problemi dei segnali CW, oggi frequenti, come click di manipolazione e splatter. Se li riscontri, potrebbe essere una buona idea contattare l'altra stazione, magari con mezzi diversi dalla radio, e farglielo presente con garbo. In alcuni modi digitali diversi dal CW si riporta anche una terza cifra, ma con un significato diverso.
 
 **Tabella 13-A: valori R nel codice RST**
 
@@ -1446,7 +1447,7 @@ L'esempio in CW mostra una struttura che può valere anche per altri modi digita
 
 ⁵⁷ Esistono discrepanze tra la taratura e le letture degli S-meter. Un S-meter di uso comune dovrebbe indicare 9 ricevendo un segnale di 50 µV (microvolt) in HF e di 5 µV in VHF/UHF, in un sistema a 50 Ω. Alcuni ricevitori permettono di modificare scale e tarature.
 
-⁵⁸ Questa buona pratica vale per i QSO normali, comprese le lunghe chiacchierate, ma chi partecipa ai contest e le DXpedition potrebbero non voler rallentare quando cercano di mantenere un ritmo di QSO veloce e costante.
+⁵⁸ Questa buona pratica vale per i QSO normali, comprese le lunghe chiacchierate, ma i partecipanti ai contest e le DXpedition potrebbero non voler rallentare quando cercano di mantenere un ritmo di QSO veloce e costante.
 
 ⁵⁹ Si potrebbe anche usare il QSB come scusa per chiudere un QSO diventato un po' noioso. Sta a te giudicare se questa piccola malizia sia opportuna.
 
@@ -2087,7 +2088,7 @@ Il funzionamento in fonia a canali, analogico o digitale, usa canali di larghezz
 
 I ripetitori permettono ai radioamatori di fare collegamenti con radio portatili semplici ed economiche. Molti radioamatori appena licenziati fanno i primi QSO proprio così, tramite il ripetitore locale.
 
-I ripetitori ritrasmettono contemporaneamente, su un canale di uscita, un segnale ricevuto su un diverso canale di ingresso. Possono essere analogici o digitali. Quando usi i ripetitori, tieni presenti queste indicazioni.
+I ripetitori ritrasmettono contemporaneamente, su un canale di uscita, un segnale ricevuto su un diverso canale di ingresso. Possono essere analogici o digitali. Quando usi i ripetitori, tieni presenti queste indicazioni:
 
 - Se possibile, collegati direttamente all'altra stazione in simplex, senza ripetitore.
 - Due stazioni fisse dovrebbero usare i ripetitori solo se il QSO non è possibile senza.
@@ -2129,7 +2130,7 @@ I satelliti radioamatoriali offrono una forma di comunicazione interessante, con
 
 Al momento della stesura c'erano oltre 20 satelliti con transponder radioamatoriali, e altri in programma. La maggior parte fa parte del programma OSCAR (Orbiting Satellite Carrying Amateur Radio). Si possono usare per trasmettere CW, fonia e dati.
 
-Il programma OSCAR è coordinato dalla Radio Amateur Satellite Corporation (AMSAT).⁹⁴ Insieme alle associazioni nazionali per i satelliti radioamatoriali, sostiene i radioamatori interessati alle comunicazioni spaziali. Anche l'Amateur Radio Space Exploration Working Group (ARSPEX) della IARU R1 offre supporto e materiali di studio.⁹⁵
+Il programma OSCAR è coordinato dalla Radio Amateur Satellite Corporation (AMSAT).⁹⁴ Insieme alle associazioni nazionali per i satelliti radioamatoriali, sostiene i radioamatori interessati alle comunicazioni spaziali. Anche l'Amateur Radio Space Exploration Working Group (ARSPEX) dell'IARU R1 offre supporto e materiali di studio.⁹⁵
 
 Il servizio di radioamatore via satellite è regolato dall'ITU. In molti paesi i titolari di licenza di radioamatore non hanno bisogno di altri permessi per puntare l'antenna, anche una piccola Yagi tenuta in mano, verso il cielo ed esplorare la radio nello spazio. Verifica però le norme nazionali, perché per usare alcune frequenze di salita (uplink) dei satelliti può servire un'autorizzazione aggiuntiva.
 

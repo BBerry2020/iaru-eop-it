@@ -9,15 +9,17 @@
 \newdimen\eoppw \eoppw=\dimexpr 2\dimexpr\eoptrimw mm\relax+6mm+\eopspine mm\relax
 \documentclass{article}
 \usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}% apostrofi tipografici ’
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage[paperwidth=\the\eoppw,paperheight=246mm,margin=0pt]{geometry}
 \pagestyle{empty}
+\frenchspacing
 \setlength{\parindent}{0pt}
 \newfontfamily\eopcoverfont{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Light,BoldFont=*-Regular,WordSpace={1.9,1.4,1}]
 \setsansfont{SourceSans3}[Path=fonts/,Extension=.otf,
   UprightFont=*-Regular,ItalicFont=*-It,BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt]
-\newfontfamily\eopcoverbold{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Semibold]
+\newfontfamily\eopcoverbold{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Semibold,WordSpace=1.3]
 \newfontfamily\eopcoverreg{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Regular,ItalicFont=*-It]
 % testo della copertina: niente sillabazione, righe a bandiera
 \newcommand{\eopnohyph}{\hyphenpenalty=10000 \exhyphenpenalty=10000 \raggedright}
@@ -38,11 +40,12 @@
   \pgfmathsetmacro\tw{\eoptrimw-24}              % giustezza del titolo in prima (12 mm dai bordi)
   \pgfmathsetmacro\bw{\eoptrimw-36}              % giustezza dei testi in quarta
   % ---- fondo azzurro: quarta e dorso ----
-  \fill[eopteal] (O) rectangle ([xshift=\xf mm,yshift=246mm]O);
+  \fill[eopteal] (O) rectangle ([xshift=\xf mm+4mm,yshift=246mm]O);
   % ---- prima di copertina: immagine centrata sul rifilo, tagliata ai lati ----
   \begin{scope}
     \clip ([xshift=\xf mm]O) rectangle ([xshift=\xr mm,yshift=246mm]O);
-    \node[inner sep=0pt] at ([xshift=\xc mm,yshift=123mm]O)
+    % immagine allineata alla piega del dorso (il globo resta ad almeno 10 mm), tagliata a destra
+    \node[inner sep=0pt,anchor=west] at ([xshift=\xf mm+3mm,yshift=123mm]O)
       {\includegraphics[height=246mm]{img/cover-clean.jpg}};
   \end{scope}
   % titolo
@@ -60,9 +63,9 @@
     at ([xshift=\xr mm-13mm,yshift=15mm]O)
     {\color{eopcream}\sffamily\fontsize{8}{10.5}\selectfont
      \textbf{TRADUZIONE ITALIANA\\NON UFFICIALE}\\[2pt]
-     per uso personale\\non approvata da IARU né da ARI};
+     per uso personale\\non approvata dall'IARU\\né dall'ARI};
   % ---- dorso: testo dal basso verso l'alto, solo se c'è spazio ----
-  \pgfmathsetmacro\eopspinefs{min(11,1.55*\eopspine)}
+  \pgfmathsetmacro\eopspinefs{min(11,1.4*\eopspine)}
   \ifdim\eopspine mm>3.9mm
     \node[rotate=90,inner sep=0pt,anchor=center]
       at ([xshift=\xs mm+0.5*\S mm,yshift=123mm]O)

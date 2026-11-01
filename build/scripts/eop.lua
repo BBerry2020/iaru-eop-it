@@ -41,7 +41,17 @@ function Div(el)
   if el.classes:includes('warn') then
     return wrap('eopwarn', el.content)
   elseif el.classes:includes('dialog') then
-    return wrap('eopdialog', el.content)
+    local c = el.content
+    local inner = {}
+    for i, b in ipairs(c) do
+      if i == 2 or (i == #c and #c > 2) then
+        table.insert(inner, pandoc.RawBlock('latex', '\\nopagebreak'))
+      end
+      table.insert(inner, b)
+    end
+    local out = { pandoc.RawBlock('latex', '\\par\\nopagebreak') }
+    for _, b in ipairs(wrap('eopdialog', inner)) do table.insert(out, b) end
+    return out
   end
 end
 
@@ -51,10 +61,12 @@ end
 
 function CodeBlock(el)
   if el.classes:includes('latex') then
-    return pandoc.RawBlock('latex', '\\[ ' .. el.text .. ' \\]')
+    -- formula semplice resa nel carattere del testo (niente font matematici Computer Modern)
+    local s = el.text:gsub('\\text{([^}]*)}', '%1'):gsub('\\times', '×'):gsub('%s*=%s*', ' = ')
+    return pandoc.RawBlock('latex', '\\par\\nopagebreak\\begin{center}' .. s .. '\\end{center}')
   end
   return pandoc.RawBlock('latex',
-    '\\begin{eopqso}\n\\begin{Verbatim}\n' .. el.text .. '\n\\end{Verbatim}\n\\end{eopqso}')
+    '\\par\\nopagebreak\\begin{eopqso}\n\\begin{Verbatim}\n' .. el.text .. '\n\\end{Verbatim}\n\\end{eopqso}')
 end
 
 -- Tables: own longtable with sans header, zebra rows and computed widths.

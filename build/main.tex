@@ -13,6 +13,9 @@
 \XeTeXgenerateactualtext=1
 \usepackage{polyglossia}
 \setmainlanguage{italian}
+% polyglossia (italiano) rimette club/widow penalty a 3000 quando attiva la lingua:
+% le portiamo a 10000 anche lì, così non restano mai righe isolate a inizio/fine pagina
+\makeatletter\g@addto@macro\blockextras@italian{\clubpenalty=10000 \@clubpenalty=10000 \widowpenalty=10000 }\makeatother
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont{SourceSerifPro}[Path=fonts/,Extension=.otf,
   UprightFont=*-Regular,ItalicFont=*-It,BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt,
@@ -26,9 +29,9 @@
 \newfontfamily\eopsymfont{SourceSans3}[Path=fonts/,Extension=.otf,UprightFont=*-Regular]
 \newfontfamily\eopliningserif{SourceSerifPro}[Path=fonts/,Extension=.otf,UprightFont=*-Regular,BoldFont=*-Semibold,Numbers=Lining]
 \usepackage{newunicodechar}
-\newunicodechar{◦}{{\eopsymfont ◦}}
+\makeatletter\newunicodechar{◦}{\leavevmode\ifdefstrequal{\f@family}{\ttdefault}{\char"25E6\relax}{{\eopsymfont\char"25E6\relax}}}\makeatother
 \makeatletter
-\renewcommand\normalsize{\@setfontsize\normalsize{9.6}{12.7}%
+\renewcommand\normalsize{\@setfontsize\normalsize{9.6}{12.5}%
   \abovedisplayskip 8pt plus2pt minus4pt\abovedisplayshortskip 0pt plus2pt
   \belowdisplayshortskip 4pt plus2pt minus2pt\belowdisplayskip \abovedisplayskip}
 \renewcommand\small{\@setfontsize\small{8.8}{11.4}}
@@ -74,9 +77,10 @@
 \usepackage{fancyvrb}
 \usepackage[most]{tcolorbox}
 \usepackage[hang,flushmargin]{footmisc}
+\renewcommand{\footnotelayout}{\raggedright}\interfootnotelinepenalty=10000
 \usepackage{dblfnote}
 \DFNalwaysdouble
-\usepackage{xurl}
+\PassOptionsToPackage{hyphens}{url}\usepackage{url}
 \usepackage{etoolbox}
 \usepackage{amsmath}
 \usepackage[bookmarksnumbered=false,bookmarksopen=true,unicode]{hyperref}
@@ -91,8 +95,8 @@
 
 % ---------- spaziature ----------
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{3.6pt plus 1.2pt minus 0.8pt}
-\setlist{itemsep=2pt,parsep=0pt,topsep=3pt,leftmargin=1.4em}
+\setlength{\parskip}{3.2pt plus 1.2pt minus 0.8pt}
+\setlist{itemsep=2pt,parsep=0pt,topsep=3pt,leftmargin=1.4em,beginpenalty=10000}% l'elenco resta attaccato alla frase che lo introduce
 \setlist[itemize,1]{label={\color{eopteal}\textbullet}}
 \setlist[itemize,2]{label={\color{eopteal}–}}
 \setlist[enumerate,1]{label=\arabic*,font=\eopliningserif\color{eopblue}}
@@ -107,18 +111,33 @@
 \renewcommand{\@makefnmark}{\hbox{\textsuperscript{\eopliningserif\color{eopblue}\@thefnmark}}}
 \makeatother
 \setcounter{secnumdepth}{-1}
-\widowpenalty=3000 \clubpenalty=3000 \raggedbottom
+% niente righe isolate in cima o in fondo alla pagina; LaTeX ripristina \clubpenalty
+% da \@clubpenalty dopo elenchi e titoli, quindi va impostato anche quello
+\widowpenalty=10000 \clubpenalty=10000 \displaywidowpenalty=10000 \raggedbottom
+\makeatletter\@clubpenalty=10000 \makeatother
+\doublehyphendemerits=900000
 
 % ---------- testatina e piede ----------
 \newcommand{\eopchapmark}{}
 \newcommand{\eopsecmark}{}
+\NewMarkClass{eop}
+\protected\def\eopmarksep{ \textcolor{eopblue!70}{·} }
+\makeatletter
+\newcommand{\eopputmark}{\begingroup
+  \protected@edef\eop@x{\eopchapmark}\protected@edef\eop@y{\eopsecmark}%
+  \ifx\eop@y\@empty\InsertMark{eop}{\eop@x}\else\InsertMark{eop}{\eop@x\eopmarksep\eop@y}\fi
+  \endgroup}
+% un marcatore all'inizio di ogni paragrafo del testo: il piè di pagina mostra la sezione
+% in cui comincia la pagina, anche quando un nuovo capitolo inizia più in basso
+\AddToHook{para/begin}{\ifinner\else\eopputmark\fi}
+\makeatother
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
 \fancyhead[L]{\footnotesize\color{eopblue}\textsc{iaru} © 2026 · 4.2.0 \textcolor{eopblue!60}{·} \textsc{traduzione italiana non ufficiale}}
 \fancyhead[R]{\footnotesize\hyperlink{abbreviazioni}{Abbreviazioni} \textcolor{eopblue!60}{·} \hyperlink{indice}{Indice}}
 \fancyfoot[L]{\sffamily\footnotesize\thepage}
-\fancyfoot[R]{\parbox[t]{0.88\textwidth}{\raggedleft\sffamily\footnotesize\eopchapmark\ifdefempty{\eopsecmark}{}{ \textcolor{eopblue!70}{·} \eopsecmark}}}
+\fancyfoot[R]{\parbox[t]{0.88\textwidth}{\raggedleft\sffamily\footnotesize\FirstMark{eop}}}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[L]{\sffamily\footnotesize\thepage}}
 \fancypagestyle{eopempty}{\fancyhf{}}
 
@@ -135,9 +154,9 @@
   \clearpage\eopfrontcont{#1}{#2}}
 \newcommand{\eopfrontcont}[2]{%
   \par\needspace{6\baselineskip}\addvspace{14pt}%
-  \hypertarget{#2}{}\phantomsection\addcontentsline{toc}{chapter}{#1}%
   \renewcommand{\eopchapmark}{#1}\renewcommand{\eopsecmark}{}%
-  {\fontsize{17}{21}\selectfont\eopheadfont\color{eopblue}#1\par}\nopagebreak\vspace{8pt}}
+  {\fontsize{17}{21}\selectfont\eopheadfont\color{eopblue}\leavevmode
+   \hypertarget{#2}{}\phantomsection\addcontentsline{toc}{chapter}{#1}\eopputmark#1\par}\nopagebreak\vspace{8pt}}
 
 \newcommand{\eoppart}[2]{%
   \clearpage
@@ -159,18 +178,18 @@
 
 \newcommand{\eopchapter}[2]{%
   \par\needspace{0.12\textheight}\addvspace{20pt}%
-  {\color{eopteal}\rule{\linewidth}{0.5pt}}\par\nopagebreak\vspace{4pt}%
-  \phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{#1}#2}%
   \renewcommand{\eopchapmark}{#2}\renewcommand{\eopsecmark}{}%
-  {\raggedright\fontsize{17}{21}\selectfont\eopheadfont\color{eopblue}%
-   \makebox[0pt][r]{\eoplightfont #1\hspace{9pt}}#2\par}%
-  \nopagebreak\vspace{10pt}}
+  \vbox{\phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{#1}#2}%
+    {\color{eopteal}\rule{\linewidth}{0.5pt}}\par\vspace{4pt}%
+    {\raggedright\fontsize{17}{21}\selectfont\eopheadfont\color{eopblue}%
+     \makebox[0pt][r]{\eoplightfont #1\hspace{9pt}}#2\par}}%
+  \eopputmark\nopagebreak\vspace{10pt}}
 
 \newcommand{\eopsection}[2]{%
   \par\needspace{5\baselineskip}\addvspace{12pt}%
-  \phantomsection\pdfbookmark[1]{#1 #2}{s#1}%
   \renewcommand{\eopsecmark}{#1 #2}%
-  {\raggedright\fontsize{11.5}{14}\selectfont\eopheadfont\color{eopblue}%
+  {\raggedright\fontsize{11.5}{14}\selectfont\eopheadfont\color{eopblue}\leavevmode
+   \phantomsection\pdfbookmark[1]{#1 #2}{s#1}\eopputmark
    \makebox[0pt][r]{\eoplightfont #1\hspace{9pt}}#2\par}%
   \nopagebreak\vspace{3pt}}
 
@@ -259,8 +278,8 @@
 
 \newenvironment{eopabbrlist}{\par\setlength{\columnsep}{14pt}\begin{multicols}{2}\fontsize{7}{7.95}\selectfont\setlength{\parskip}{0pt}\interlinepenalty=10000\raggedright}{\end{multicols}}
 \newlength{\eopabbrsep}\setlength{\eopabbrsep}{2.5pt plus 1.5pt}
-\newcommand{\eopabbr}[2]{\par\vspace{\eopabbrsep}\hangindent=3.9em\hangafter=1\noindent
-  \makebox[3.9em][l]{\sffamily\bfseries\color{eopblue}#1}#2\par}
+\newcommand{\eopabbr}[2]{\par\vspace{\eopabbrsep}\hangindent=4.4em\hangafter=1\noindent
+  \makebox[4.4em][l]{\sffamily\bfseries\color{eopblue}#1}#2\par}
 
 % ---------- indice ----------
 \makeatletter
@@ -277,6 +296,7 @@
 \makeatother
 
 \begin{document}
+\hyphenation{ITU IARU RRR DATA DIGI QRL QSB HAREC CEPT KiwiSDR WebSDR OpenWebRX Maidenhead Demeuleneere Zanzibar fldigi}
 \frontmatter
 \pagenumbering{roman}
 
@@ -324,7 +344,7 @@ Rafal Lukawiecki EI6LA\par
 \end{minipage}\par
 \vfill
 {\color{eopteal}\rule{\linewidth}{0.4pt}}\par\vspace{7pt}
-{\small\setlength{\parskip}{6pt}
+{\small\raggedright\setlength{\parskip}{6pt}
 \newcommand{\eopcplabel}[1]{{\sffamily\bfseries\color{eopblue}#1}}%
 \eopcplabel{Traduzione italiana non ufficiale, per uso personale.}
 Realizzata a titolo personale, per studio e consultazione: non è una traduzione ufficiale
@@ -343,21 +363,22 @@ Amateur Radio Union Region~1, licenza Creative Commons Attribuzione – Condivid
 4.0 Internazionale (CC~BY-SA~4.0):
 \href{https://creativecommons.org/licenses/by-sa/4.0/deed.it}{\nolinkurl{creativecommons.org/licenses/by-sa/4.0}}.
 Pagina ufficiale:
-\href{https://www.iaru-r1.org/on-the-air/eop/}{Codes of Conduct | International Amateur Radio Union (IARU)}.
+\href{https://www.iaru-r1.org/on-the-air/eop/}{Codes of Conduct | International Amateur Radio Union (IARU)}
+(\nolinkurl{www.iaru-r1.org/on-the-air/eop}).
 Pubblicata da International Amateur Radio Union Region~1 (IARU~R1), c/o Baer-Nutz-AG,
 Scheuermattstrasse 8A, CH-6330 Cham ZG, Svizzera ·
 \href{mailto:eop@iaru-r1.org}{eop@iaru-r1.org} · ISBN 978-3-9526620-0-7 (PDF eBook, inglese);
 questa traduzione non ha un ISBN proprio.
 
 \eopcplabel{Copertina.} Immagine di Silvano Ancelotti © 2025, usata secondo la licenza
-\href{https://creativecommons.org/licenses/by/4.0}{CC~BY~4.0}; in questa edizione è stata modificata rimuovendo il testo originale e il logo IARU.
+\href{https://creativecommons.org/licenses/by/4.0}{CC~BY~4.0} (\nolinkurl{creativecommons.org/licenses/by/4.0}); in questa edizione è stata modificata rimuovendo il testo originale e il logo IARU.
 
 {\color{eopblue!80}Bozza 0.1 · novembre 2026 · Composto in Source Serif e Source Sans.}\par}
 \clearpage
 
 % ================= INDICE =================
 \hypertarget{indice}{}
-\renewcommand{\eopchapmark}{Indice}\renewcommand{\eopsecmark}{}
+\renewcommand{\eopchapmark}{Indice}\renewcommand{\eopsecmark}{}\eopputmark
 {\fontsize{17}{21}\selectfont\eopheadfont\color{eopblue}Indice\par}\vspace{10pt}
 \phantomsection\addcontentsline{toc}{chapter}{Indice}
 \makeatletter\@starttoc{toc}\makeatother

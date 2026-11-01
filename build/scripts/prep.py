@@ -23,6 +23,7 @@ def tex_escape(s):
         "\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$",
         "#": r"\#", "_": r"\_", "{": r"\{", "}": r"\}",
         "~": r"\textasciitilde{}", "^": r"\textasciicircum{}",
+        "\u00a0": "~",
     }
     return "".join(rep.get(c, c) for c in s)
 
@@ -55,6 +56,29 @@ for l in lines:
     body.append(l)
 assert len(notes) == 99, len(notes)
 
+UNITS = r"(?:Hz|kHz|MHz|GHz|mW|kW|W|dBm|dBi|dBd|dB|mm|cm|km|m|ms|s|V|A|pF|µV|°C)"
+
+
+def typo(s):
+    """Spazi non separabili: numero e unità di misura, lineetta mai a inizio riga;
+    sigle con trattino che non vanno spezzate."""
+    s = re.sub(r"(\d)(?: )(%s)(?![\w/])" % UNITS, "\\1\u00a0\\2", s)
+    s = re.sub(r"(\d) – (\d)", "\\1\u00a0–\u00a0\\2", s)
+    s = re.sub(r"(?<=\S) – ", "\u00a0– ", s)
+    s = re.sub(r"\b(ITU-R|WSJT-X)\b", r"`\\mbox{\1}`{=latex}", s)
+    return s
+
+
+in_code = False
+for k, l in enumerate(body):
+    if l.startswith("```"):
+        in_code = not in_code
+        continue
+    if not in_code and not l.startswith("|"):
+        body[k] = typo(l)
+for n in notes:
+    notes[n] = typo(notes[n])
+
 out = []
 i = 0
 chapter_lead_pending = False
@@ -71,8 +95,22 @@ def flush_dialog():
         in_dialog = False
 
 
+in_fence = False
 while i < len(body):
     l = body[i]
+
+    # --- code blocks: copied as they are (the QSO examples in monospace)
+    if l.startswith("```"):
+        if not in_fence:
+            flush_dialog()
+        in_fence = not in_fence
+        out.append(l)
+        i += 1
+        continue
+    if in_fence:
+        out.append(l)
+        i += 1
+        continue
 
     # --- abbreviations table -> two-column list
     if l.startswith("## Abbreviazioni"):
@@ -222,7 +260,9 @@ ANCHORS = {
     "screen": {"5-i": "Se sembra che la causa sia la tua stazione",
                "5-ii": "È fondamentale anche rivedere"},
     "print": {"5-i": "Se sembra che la causa sia la tua stazione",
-              "5-ii": "I tempi di salita e di discesa"},
+              "5-ii": "I tempi di salita e di discesa",
+              "7-i": "Esistono diversi servizi di ascolto radio online",
+              "7-ii": "Se la piattaforma software del ricevitore"},
 }
 if os.environ.get("EOP_ANCHORS"):  # per le prove: {"5-i": "..."}
     ANCHORS[LAYOUT] = json.loads(os.environ["EOP_ANCHORS"])
@@ -242,9 +282,16 @@ def move_pair_before(md, key, anchor):
 
 
 # tabelle affiancate: subito dopo il paragrafo che le annuncia, se serve a evitare vuoti
-PAIR_ANCHORS = {"screen": {}, "print": {"11-A": "Quando parli, accentua la sillaba"}}
+PAIR_ANCHORS = {"screen": {}, "print": {"11-A": "```{=latex}\n\\eopsection{11.1}"}}
+if os.environ.get("EOP_PAIRS") is not None:  # per le prove
+    PAIR_ANCHORS[LAYOUT] = json.loads(os.environ["EOP_PAIRS"] or "{}")
 for key, anchor in PAIR_ANCHORS[LAYOUT].items():
     md = move_pair_before(md, key, anchor)
+
+if LAYOUT == "print":
+    nota = " \\[N.d.T.: in questa traduzione sono cliccabili solo i link esterni.\\]"
+    assert nota in md, "nota sui link non trovata"
+    md = md.replace(nota, "")
 
 # bold uppercase run-in labels (AMICIZIA., R – LEGGIBILITÀ (READABILITY).) -> small caps
 md = re.sub(r"\*\*([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ ,'’()–-]+\.)\*\*",

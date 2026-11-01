@@ -41,8 +41,8 @@ assert r"\eopbleed" in t
 # testatina e piede: niente link (su carta non servono), tutto speculare
 cut(r"\fancyhead[L]{", r"\fancypagestyle{eopempty}", r"""\fancyhead[LE,RO]{\footnotesize\color{eopblue}\textsc{iaru} © 2026 · 4.2.0 \textcolor{eopblue!60}{·} \textsc{traduzione italiana non ufficiale}}
 \fancyfoot[LE,RO]{\sffamily\footnotesize\thepage}
-\fancyfoot[RE]{\parbox[t]{0.86\textwidth}{\raggedleft\sffamily\footnotesize\eopchapmark\ifdefempty{\eopsecmark}{}{ \textcolor{eopblue!70}{·} \eopsecmark}}}
-\fancyfoot[LO]{\parbox[t]{0.86\textwidth}{\raggedright\sffamily\footnotesize\eopchapmark\ifdefempty{\eopsecmark}{}{ \textcolor{eopblue!70}{·} \eopsecmark}}}
+\fancyfoot[RE]{\parbox[t]{0.86\textwidth}{\raggedleft\sffamily\footnotesize\FirstMark{eop}}}
+\fancyfoot[LO]{\parbox[t]{0.86\textwidth}{\raggedright\sffamily\footnotesize\FirstMark{eop}}}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\sffamily\footnotesize\thepage}}
 """)
 
@@ -60,7 +60,7 @@ for k, v in (("5-i", "0.65"), ("5-ii", "0.65"), ("7-i", "0.58"), ("7-ii", "0.58"
 sub(r"\begin{multicols}{2}\fontsize{7}{7.95}\selectfont",
     r"\begin{multicols}{2}\fontsize{ABBRFS}\selectfont")
 sub(r"\setlength{\eopabbrsep}{2.5pt plus 1.5pt}", r"\setlength{\eopabbrsep}{ABBRSEP}")
-t = t.replace("ABBRFS", "8.8}{10.5").replace("ABBRSEP", "5pt plus 1.5pt")
+t = t.replace("ABBRFS", "8.8}{10.5").replace("ABBRSEP", "4.4pt plus 1.5pt")
 
 # colori per la stampa (linee guida 4graph): CMYK con profilo FOGRA51 (PSO Coated v3),
 # valori calcolati dagli originali sRGB con intento colorimetrico relativo;
