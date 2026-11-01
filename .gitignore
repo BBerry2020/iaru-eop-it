@@ -1,0 +1,8 @@
+# file intermedi di compilazione
+build/prepped.md
+build/body.tex
+build/*.aux
+build/*.log
+build/*.out
+build/*.toc
+build/main.pdf
